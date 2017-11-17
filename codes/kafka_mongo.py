@@ -30,21 +30,20 @@ class TweeterStreamListener(tweepy.StreamListener):
         try:
             status1 = json.dumps(status.replace("\\'", "'"))
             d = yaml.safe_load(status1)
-            print d
+            # print d
             # jd = json.dumps(d)
             self.producer.send_messages(b'twitterstream', d)
             # self.producer.send('twitterstream', status)
+            client_mongo = pymongo.MongoClient('localhost', 27017)
+            db = client_mongo['dicdatabase']
+            coll = db['diccoll']
+
+            result = db.diccoll.insert_one(json.loads(status))
+            print(result.inserted_id)
         except Exception as e:
             print(e)
             return False
         return True
-
-        # client_mongo = pymongo.MongoClient('localhost', 27017)
-        # db = client_mongo['dicdatabase']
-        # coll = db['diccoll']
-        #
-        # result = db.diccoll.insert_one(json.loads(status))
-        # print(result.inserted_id)
 
     def on_error(self, status_code):
         print("Error received in kafka producer")

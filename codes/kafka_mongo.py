@@ -28,6 +28,13 @@ class TweeterStreamListener(tweepy.StreamListener):
         # msg = status.text.encode('utf-8')
         # print(json.loads(status))
         try:
+<<<<<<< HEAD
+            #status1 = json.dumps(status.replace("\\'", "'"))
+            #d = yaml.safe_load(status1)
+            # print d
+            # jd = json.dumps(d)
+            #self.producer.send_messages(b'twitterstream', d)
+=======
             # status1 = json.dumps(status.replace("\\'", "'"))
             # d = yaml.safe_load(status1)
             new_data = dict()
@@ -38,18 +45,26 @@ class TweeterStreamListener(tweepy.StreamListener):
             print json.dumps(status1, indent=4, sort_keys=True)
             # jd = json.dumps(d)
             # self.producer.send_messages(b'twitterstream', d)
+>>>>>>> sachin
             # self.producer.send('twitterstream', status)
+            client_mongo = pymongo.MongoClient('localhost', 27017)
+            db = client_mongo['dicdatabase']
+            coll = db['twitterTweets']
+            # print ("Status: ")
+            # print (status)
+
+            tweet = json.loads(status) # load it as Python dict
+            # print("Pretty print: ")
+            # print (json.dumps(tweet, indent=2))
+            # print (json.dumps(tweet)) # pretty-print
+            # print (tweet)
+
+            result = db.twitterTweets.insert_one(tweet)
+            print(db.twitterTweets.count())
         except Exception as e:
             print(e)
             return False
         return True
-
-        # client_mongo = pymongo.MongoClient('localhost', 27017)
-        # db = client_mongo['dicdatabase']
-        # coll = db['diccoll']
-        #
-        # result = db.diccoll.insert_one(json.loads(status))
-        # print(result.inserted_id)
 
     def on_error(self, status_code):
         print("Error received in kafka producer")

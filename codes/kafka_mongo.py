@@ -18,8 +18,8 @@ class TweeterStreamListener(tweepy.StreamListener):
     def __init__(self, api):
         self.api = api
         super(tweepy.StreamListener, self).__init__()
-        client = KafkaClient("localhost:9092")
-        self.producer = SimpleProducer(client, async=True, batch_send_every_n=1000, batch_send_every_t=10)
+        # client = KafkaClient("localhost:9092")
+        # self.producer = SimpleProducer(client, async=True, batch_send_every_n=1000, batch_send_every_t=10)
         # self.producer = kafka.KafkaProducer(value_serializer=lambda m: json.dumps(m).encode('ascii'))
 
     def on_data(self, status):
@@ -28,11 +28,16 @@ class TweeterStreamListener(tweepy.StreamListener):
         # msg = status.text.encode('utf-8')
         # print(json.loads(status))
         try:
-            status1 = json.dumps(status.replace("\\'", "'"))
-            d = yaml.safe_load(status1)
-            print d
+            # status1 = json.dumps(status.replace("\\'", "'"))
+            # d = yaml.safe_load(status1)
+            new_data = dict()
+            print "Status: "
+            status1 = json.loads(status)
+
+            print status1
+            print json.dumps(status1, indent=4, sort_keys=True)
             # jd = json.dumps(d)
-            self.producer.send_messages(b'twitterstream', d)
+            # self.producer.send_messages(b'twitterstream', d)
             # self.producer.send('twitterstream', status)
         except Exception as e:
             print(e)

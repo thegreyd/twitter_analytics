@@ -1,0 +1,28 @@
+Columns-
+Timestamp
+Country
+City
+User name
+No. of friends
+No. of followers
+Hash tag -- {SPARK- map each hashtag to 1}
+No. of favorites
+No of re-tweets
+No of replies
+Sentiment -- { SPARK- text analysis on each tweet to get a sentiment}
+New column -- {SPARK- map each tweet to 1}
+
+Visualization ideas-
+Give user option to filter on Country --> City
+Top hashtags (Computed from- i) Count of hashtag, ii) Hashtag mentioned in tweets with highest number of a) retweets, b) replies, c) favorites
+Prolific tweeters (Computed from- No. of i) tweets, ii) friends, iii) followers, iv) retweets, v) replies, vi) favorites
+Common sentiment (Computed from new column)
+
+Example questions that can be answered-
+1) What are the top/ trending hashtags in USA
+2) Who are the top tweeters in Raleigh
+3) Who are the top tweeters tweeting about XYZ startup
+4) What are the startups most people are tweeting about
+5) How popular is twitter in SF vs NY
+6) What are the top sentiments of people in India
+7) What are the sentiments of people tweeting about Trump

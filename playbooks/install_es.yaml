@@ -1,0 +1,80 @@
+---
+- hosts: elastic
+  gather_facts: no
+  become: yes
+  
+  tasks:
+
+  - name: Update packages
+    apt:
+      update_cache: yes
+      upgrade: dist
+
+  - name: Add ES key
+    apt_key:
+      url: "https://artifacts.elastic.co/GPG-KEY-elasticsearch"
+      state: present
+
+  - name: Add ES repo
+    apt_repository:
+      repo: "deb https://artifacts.elastic.co/packages/6.x/apt stable main"
+      state: present
+      update_cache: yes
+
+  - name: Install packages
+    apt:
+      name: "{{ item }}"
+      state: present
+    with_items:
+      - openjdk-8-jdk
+      - elasticsearch
+      - python-minimal
+      - python-pip
+    
+  - name: start es
+    service:
+      name: elasticsearch
+      state: started
+    
+  - name: configure es network
+    lineinfile:
+      path: /etc/elasticsearch/elasticsearch.yml
+      regexp: '^network.host'
+      line: 'network.host: 0.0.0.0'
+    register: es_config1
+
+  - name: configure es jvm
+    lineinfile:
+      path: /etc/elasticsearch/jvm.options
+      regexp: '^-Xms'
+      line: '-Xms512m'
+    register: es_config2
+
+  - name: configure es jvm
+    lineinfile:
+      path: /etc/elasticsearch/jvm.options
+      regexp: '^-Xmx'
+      line: '-Xmx512m'
+    register: es_config3
+
+  - name: restart es
+    service:
+      name: elasticsearch
+      state: restarted
+    when: es_config1|changed or es_config2|changed or es_config3|changed
+
+  - name: copy mongo2es.py
+    template:
+      src: codes/mongo2es.py
+      dest: /home/ubuntu/mongo2es.py
+
+  - name: copy m2e_requirements.txt
+    template:
+      src: codes/m2e_requirements.txt
+      dest: /home/ubuntu/m2e_requirements.txt
+
+  - name: pip install packages
+    pip:
+      requirements: /home/ubuntu/m2e_requirements.txt
+      executable: pip-2.7
+

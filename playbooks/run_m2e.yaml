@@ -1,0 +1,8 @@
+---
+- hosts: elastic
+  tasks:
+    - command: python2 /home/ubuntu/mongo2es.py
+      register: shell_result
+
+    - debug:
+        var: shell_result.stdout_line

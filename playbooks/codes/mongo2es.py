@@ -1,13 +1,12 @@
 from pymongo import MongoClient
 from elasticsearch import Elasticsearch
-from elasticsearch.helpers import bulk, parallel_bulk
-from collections import deque
+from elasticsearch.helpers import bulk
 from tqdm import tqdm
-import time, json
+import json
 
 def main():
 
-    mgclient = MongoClient('localhost', 27017)
+    mgclient = MongoClient('10.0.0.253')
     db = mgclient['dicdatabase']
     col = db['twitterTweets']
 
@@ -67,7 +66,7 @@ def filter(data):
             if isinstance(essentials[e], dict):
                 attrs = essentials[e].keys()
                 for i in attrs:
-                    if i in data[e]:
+                    if data[e] and i in data[e]:
                         essentials[e][i] = data[e][i]
             else:
                 essentials[e] = data[e]
@@ -76,5 +75,3 @@ def filter(data):
     
 if __name__ == "__main__":
     main()
-
-#_id, text

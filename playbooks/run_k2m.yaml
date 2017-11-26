@@ -1,0 +1,8 @@
+---
+- hosts: mongo
+  tasks:
+    - command: python2 /home/ubuntu/kafka2mongo.py
+      register: shell_result
+
+    - debug:
+        var: shell_result.stdout_line

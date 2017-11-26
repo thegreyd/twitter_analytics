@@ -1,0 +1,43 @@
+---
+- hosts: kafka
+  gather_facts: no
+  become: yes
+  
+  tasks:
+
+  - name: Update packages
+    apt:
+      update_cache: yes
+      upgrade: dist
+
+  - name: Install packages
+    apt:
+      name: "{{ item }}"
+      state: present
+    with_items:
+      - openjdk-8-jdk
+      - zookeeperd
+    
+  - name: Create Kafka dir
+    file: 
+      path: /opt/Kafka 
+      state: directory
+
+  - name: Download Kafka
+    unarchive:
+      creates: /opt/Kafka/kafka_2.11-1.0.0
+      src: http://apache.cs.utah.edu/kafka/1.0.0/kafka_2.11-1.0.0.tgz
+      dest: /opt/Kafka
+      remote_src: yes
+
+  - name: Configure kafka
+    lineinfile:
+      path: /opt/Kafka/kafka_2.11-1.0.0/bin/kafka-server-start.sh
+      regexp: 'export KAFKA_HEAP_OPTS='
+      line: '    export KAFKA_HEAP_OPTS="-Xmx512M -Xms512M"'
+    register: kafka_config
+
+  - name: Run kafka server
+    shell: /opt/Kafka/kafka_2.11-1.0.0/bin/kafka-server-start.sh /opt/Kafka/kafka_2.11-1.0.0/config/server.properties
+    async: 2592000
+    poll: 0

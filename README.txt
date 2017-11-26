@@ -2,12 +2,6 @@ Installing Required Python Libraries
 We have provided a text file containing the required python packages: requirements.txt. 
 To install all of these at once, simply run (only missing packages will be installed):
 $ sudo pip2 install -r requirements.txt
-https://www.digitalocean.com/community/tutorials/how-to-install-mongodb-on-ubuntu-16-04
-
-sudo systemctl unmask mongodb.service
-
-Installing and Initializing Kafka
-Download and extract the latest binaryfrom https://kafka.apache.org/downloads.html
 
 Start zookeeper service:
 $ $KAFKA_HOME/bin/zookeeper-server-start.sh config/zookeeper.properties 

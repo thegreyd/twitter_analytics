@@ -1,0 +1,74 @@
+---
+- hosts: mongo
+  gather_facts: no
+  become: yes
+  
+  tasks:
+
+  - name: Update packages
+    apt:
+      update_cache: yes
+      upgrade: dist
+
+  - name: Add mongo key
+    apt_key:
+      keyserver: keyserver.ubuntu.com
+      id: EA312927
+
+  - name: Add mongo repo
+    apt_repository:
+      repo: "deb http://repo.mongodb.org/apt/ubuntu xenial/mongodb-org/3.2 multiverse"
+      state: present
+      update_cache: yes
+
+  - name: Install packages
+    apt:
+      name: "{{ item }}"
+      state: present
+    with_items:
+      - mongodb-org
+      - python-minimal
+      - python-pip
+    
+  - name: Create mongo service
+    template:
+      src: mongo.config
+      dest: /etc/systemd/system/mongodb.service
+
+  - name: start mongo service
+    service:
+      name: mongodb
+      state: started
+
+  - name: Configure mongo
+    lineinfile:
+      path: /etc/mongod.conf
+      regexp: 'bindIp:'
+      line: '  bindIp: 0.0.0.0'
+    register: mongo_config
+
+  - name: restart mongo service
+    service:
+      name: mongodb
+      state: restarted
+    when: mongo_config|changed
+
+  - name: copy twitter.txt
+    template:
+      src: codes/twitter.txt
+      dest: /home/ubuntu/twitter.txt
+
+  - name: copy kafka2mongo.py
+    template:
+      src: codes/kafka2mongo.pyk
+      dest: /home/ubuntu/kafka2mongo.py
+
+  - name: copy k2m_requirements.txt
+    template:
+      src: codes/k2m_requirements.txt
+      dest: /home/ubuntu/k2m_requirements.txt
+
+  - name: pip install packages
+    pip:
+      requirements: /home/ubuntu/k2m_requirements.txt
+      executable: pip-2.7

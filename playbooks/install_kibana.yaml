@@ -1,0 +1,73 @@
+---
+- hosts: kibana
+  gather_facts: no
+  become: yes
+  
+  tasks:
+
+  - name: Update packages
+    apt:
+      update_cache: yes
+      upgrade: dist
+
+  - name: Add ES key
+    apt_key:
+      url: "https://artifacts.elastic.co/GPG-KEY-elasticsearch"
+      state: present
+
+  - name: Add ES repo
+    apt_repository:
+      repo: "deb https://artifacts.elastic.co/packages/6.x/apt stable main"
+      state: present
+      update_cache: yes
+
+  - name: Install packages
+    apt:
+      name: "{{ item }}"
+      state: present
+    with_items:
+      - kibana
+      - nginx
+      - python3-passlib
+    
+  - name: start kibana
+    service:
+      name: kibana
+      state: started
+  
+  - name: configure kibana
+    lineinfile:
+      path: /etc/kibana/kibana.yml
+      regexp: '^server.host'
+      line: 'server.host: "localhost"'
+    register: kibana_config1
+
+  - name: configure kibana
+    lineinfile:
+      path: /etc/kibana/kibana.yml
+      regexp: '^elasticsearch.url'
+      line: 'elasticsearch.url: "http://10.0.0.105:9200"'
+    register: kibana_config2
+  
+  - name: restart kibana
+    service:
+      name: kibana
+      state: restarted
+    when: kibana_config1|changed or kibana_config2|changed
+
+  - htpasswd:
+      path: /etc/nginx/htpasswd.users
+      name: kibanaadmindic
+      password: 'dic_team4'
+    register: nginx_config1
+
+  - template:
+      src: nginx.config
+      dest: /etc/nginx/sites-available/default
+    register: nginx_config2
+
+  - name: restart nginx
+    service:
+      name: nginx
+      state: restarted
+    when: nginx_config1|changed or nginx_config2|changed

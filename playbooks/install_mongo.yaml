@@ -39,6 +39,7 @@
     service:
       name: mongodb
       state: started
+      enabled: yes
 
   - name: Configure mongo
     lineinfile:
@@ -71,4 +72,4 @@
   - name: pip install packages
     pip:
       requirements: /home/ubuntu/k2m_requirements.txt
-      executable: pip-2.7
+      executable: pip2

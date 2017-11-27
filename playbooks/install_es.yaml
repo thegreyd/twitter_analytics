@@ -35,6 +35,7 @@
     service:
       name: elasticsearch
       state: started
+      enabled: yes
     
   - name: configure es network
     lineinfile:
@@ -76,5 +77,5 @@
   - name: pip install packages
     pip:
       requirements: /home/ubuntu/m2e_requirements.txt
-      executable: pip-2.7
+      executable: pip2
 

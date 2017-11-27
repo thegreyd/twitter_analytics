@@ -3,6 +3,7 @@
     score: 
     sentiment: 
     time: 
+    text:
 }
 
 run script on mongo server

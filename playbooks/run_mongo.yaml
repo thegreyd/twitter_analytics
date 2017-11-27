@@ -1,0 +1,31 @@
+---
+- hosts: mongo
+  tasks:
+    - name: copy mongo2es.py
+      template:
+        src: codes/mongo2es.py
+        dest: /home/ubuntu/mongo2es.py
+
+    - name: copy mongo2es2.py
+      template:
+        src: codes/mongo2es2.py
+        dest: /home/ubuntu/mongo2es2.py
+
+    - name: copy reddit_stream.py
+      template:
+        src: codes/reddit_stream.py
+        dest: /home/ubuntu/reddit_stream.py
+
+    - name: copy twitter_stream.py
+      template:
+        src: codes/twitter_stream.py
+        dest: /home/ubuntu/twitter_stream.py
+
+    # - name: run python script
+    #   command: python3 mongo2es.py
+    #   args:
+    #     chdir: /home/ubuntu/
+    #   register: shell_result
+
+    # - debug:
+    #     var: shell_result.stdout_line

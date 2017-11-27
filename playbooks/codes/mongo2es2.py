@@ -7,18 +7,18 @@ def main():
 
     mgclient = MongoClient()
     db = mgclient['dicdatabase']
-    col = db['common_all']
+    col = db['common_latest']
 
     print(col.count())
 
-    es1 = Elasticsearch(['10.0.0.105'])
-
+    es1 = Elasticsearch(['10.0.0.49'])
+    
     def upload():
         actions = []
         for data in tqdm(col.find(), total=col.count()):
             action = {
                     "index": {
-                            "_index": 'common_all',
+                            "_index": 'common_latest',
                             "_type": 'twitterreddit',
                             }
             }
@@ -33,8 +33,8 @@ def main():
                 "number_of_replicas": 0
             }
         }
-        es1.indices.create(index='common_all', body = request_body, ignore=400)
-        res = es1.bulk(index = 'common_all', body = actions, refresh = True)
+        es1.indices.create(index='common_latest', body = request_body, ignore=400)
+        res = es1.bulk(index = 'common_latest', body = actions, refresh = True)
 
     upload()
 

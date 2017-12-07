@@ -1,0 +1,6 @@
+pyspark
+boto3
+afinn
+pymongo
+nltk
+pattern

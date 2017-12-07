@@ -6,11 +6,6 @@
         src: codes/mongo2es.py
         dest: /home/ubuntu/mongo2es.py
 
-    - name: copy mongo2es2.py
-      template:
-        src: codes/mongo2es2.py
-        dest: /home/ubuntu/mongo2es2.py
-
     - name: copy reddit_stream.py
       template:
         src: codes/reddit_stream.py
@@ -20,6 +15,16 @@
       template:
         src: codes/twitter_stream.py
         dest: /home/ubuntu/twitter_stream.py
+
+    - name: copy config.py
+      template:
+        src: codes/config.py
+        dest: /home/ubuntu/config.py
+
+    - name: copy twitter_keywords.py
+      template:
+        src: codes/twitter_keywords.py
+        dest: /home/ubuntu/twitter_keywords.py
 
     # - name: run python script
     #   command: python3 mongo2es.py

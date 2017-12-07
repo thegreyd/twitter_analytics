@@ -1,4 +1,5 @@
-import json, tweepy, configparser, pymongo
+import json, tweepy, configparser, pymongo, keywords
+from afinn import Afinn
 
 def filter(data):
     data = json.loads(data)

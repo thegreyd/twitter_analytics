@@ -11,10 +11,10 @@ import json, tweepy, pymongo
 from pymongo import MongoClient
 
 # Variables that contains the user credentials to access Twitter API
-access_token = "765348591451967488-IhFy4M4pwLChsubplCB526Rk1Xvfqjq"
-access_token_secret = "24kzoS1mplySlNbWQhUf105xJ8Ccql4mM85WPS0xPMRDB"
-consumer_key = "5dA5c6aCKS6pHU8Kz2Rnqt2Ht"
-consumer_secret = "rteAS1lV9sNFkbMrR11n93mV3T7bD5NMS31utBnPoHa5HqzEYi"
+access_token = "ACCESS_TOKEN"
+access_token_secret = "ACCESS_TOKEN_SECRET"
+consumer_key = "CONSUMER_KEY"
+consumer_secret = "CONSUMER_SECRET"
 
 
 # This is a basic listener that just prints received tweets to stdout.
